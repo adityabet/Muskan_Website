@@ -75,20 +75,20 @@ export default function CinematicVideo() {
       className="relative h-[400vh] w-full bg-[#0D0D0C]"
     >
       {/* Sticky viewport container - keeps the symphony pinned while scrubbing */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#0D0D0C] text-[#FAF9F6] pt-24 sm:pt-28 pb-6">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#0D0D0C] text-[#FAF9F6] pt-20 sm:pt-28 pb-3 sm:pb-6">
 
         {/* Decorative Top Line */}
         <div className="absolute top-0 left-0 w-full h-[1px] bg-[#FAF9F6]/10" />
 
         {/* Chapter Indicator Header */}
-        <div className="text-center mb-4 sm:mb-6 z-20 px-6 max-w-xl shrink-0">
-          <span className="text-[10px] font-mono tracking-[0.4em] uppercase text-[#C5A059] mb-3 block font-semibold">
+        <div className="text-center mb-2 sm:mb-6 z-20 px-6 max-w-xl shrink-0">
+          <span className="text-[9px] sm:text-[10px] font-mono tracking-[0.4em] uppercase text-[#C5A059] mb-1.5 sm:mb-3 block font-semibold">
             Symphony IV / Motion
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl tracking-tight font-medium mb-2">
+          <h2 className="font-serif text-xl sm:text-4xl tracking-tight font-medium mb-1 sm:mb-2 leading-tight">
             Living Cinematic Walkthrough
           </h2>
-          <p className="text-xs text-[#FAF9F6]/50 font-light leading-relaxed">
+          <p className="hidden sm:block text-xs text-[#FAF9F6]/50 font-light leading-relaxed">
             Experience spatial warmth in continuous, hyper-smooth frame rates.
           </p>
         </div>
@@ -122,8 +122,8 @@ export default function CinematicVideo() {
         </div>
 
         {/* Ambient bottom caption */}
-        <div className="mt-4 sm:mt-6 px-6 text-center max-w-sm z-20 shrink-0">
-          <p className="text-[10px] font-mono tracking-[0.25em] text-[#FAF9F6]/40 uppercase">
+        <div className="mt-2 sm:mt-6 px-6 text-center max-w-sm z-20 shrink-0">
+          <p className="text-[8px] sm:text-[10px] font-mono tracking-[0.2em] sm:tracking-[0.25em] text-[#FAF9F6]/40 uppercase leading-relaxed">
             Continuous camera pan • 4K UHD Master • Atmos Audio Enabled
           </p>
         </div>
