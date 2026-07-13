@@ -73,15 +73,37 @@ export default function InspirationGrid() {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 md:mb-24 gap-6">
           <div>
-            <span className="text-xs font-mono tracking-[0.3em] uppercase text-[#B5945B] font-medium block mb-3">
-              06 / The Aesthetics
-            </span>
-            <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl tracking-tight font-semibold">
-              Material Mood Board
-            </h2>
+            <div className="overflow-hidden">
+              <motion.span
+                initial={{ y: "100%" }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="text-xs font-mono tracking-[0.3em] uppercase text-[#B5945B] font-medium block mb-3"
+              >
+                06 / The Aesthetics
+              </motion.span>
+            </div>
+            <div className="overflow-hidden py-1">
+              <motion.h2
+                initial={{ y: "100%" }}
+                whileInView={{ y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="font-serif text-4xl sm:text-5xl md:text-6xl tracking-tight font-semibold"
+              >
+                Material Mood Board
+              </motion.h2>
+            </div>
           </div>
-          
-          <div className="flex flex-col items-start md:items-end gap-3 max-w-sm">
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-col items-start md:items-end gap-3 max-w-sm"
+          >
             <p className="text-sm text-[#1C1A17]/60 font-light leading-relaxed md:text-right">
               A curated catalog of raw material textures, color pigments, and architectural models.
             </p>
@@ -95,7 +117,7 @@ export default function InspirationGrid() {
               <Instagram className="w-3.5 h-3.5 mr-2" />
               Follow Atelier Journal
             </a>
-          </div>
+          </motion.div>
         </div>
 
         {/* Pinterest-inspired Masonry Grid */}

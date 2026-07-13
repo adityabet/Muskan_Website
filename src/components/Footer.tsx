@@ -1,6 +1,16 @@
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowUp } from "lucide-react";
 
 export default function Footer() {
+  const wordmarkRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: wordmarkRef,
+    offset: ["start end", "end end"],
+  });
+  const wordmarkScale = useTransform(scrollYProgress, [0, 1], [0.85, 1]);
+  const wordmarkOpacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
+
   const scrollUp = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -10,8 +20,14 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
         
         {/* Top Section Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-          
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-16 items-start"
+        >
+
           {/* Logo Brand Descriptor */}
           <div className="lg:col-span-5 space-y-6">
             <div className="flex flex-col">
@@ -93,13 +109,16 @@ export default function Footer() {
             </button>
           </div>
 
-        </div>
+        </motion.div>
 
         {/* Massive Monumental Wordmark Footer */}
-        <div className="mt-20 border-t border-[#E5DEC9] pt-16 select-none pointer-events-none">
-          <h1 className="font-serif text-[4.5rem] sm:text-[8rem] md:text-[11rem] lg:text-[14rem] tracking-[0.06em] text-center uppercase leading-none font-bold text-[#E5DEC9]/30 transition-colors duration-500">
+        <div ref={wordmarkRef} className="mt-20 border-t border-[#E5DEC9] pt-16 select-none pointer-events-none">
+          <motion.h1
+            style={{ scale: wordmarkScale, opacity: wordmarkOpacity }}
+            className="font-serif text-[4.5rem] sm:text-[8rem] md:text-[11rem] lg:text-[14rem] tracking-[0.06em] text-center uppercase leading-none font-bold text-[#E5DEC9]/30 transition-colors duration-500"
+          >
             Muskan
-          </h1>
+          </motion.h1>
         </div>
 
         {/* Bottom row copyrights */}

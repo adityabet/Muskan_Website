@@ -46,19 +46,46 @@ export default function ConsultationForm() {
         
         {/* Header Block */}
         <div className="text-center max-w-2xl mx-auto mb-16 md:mb-20">
-          <span className="text-xs font-mono tracking-[0.3em] uppercase text-[#C5A059] font-medium block mb-3">
-            07 / The Inquiry
-          </span>
-          <h2 className="font-serif text-4xl md:text-5xl tracking-tight font-semibold">
-            Book A Spatial Consultation
-          </h2>
-          <p className="text-sm text-[#1C1A17]/60 mt-4 font-light leading-relaxed">
+          <div className="overflow-hidden inline-block mx-auto">
+            <motion.span
+              initial={{ y: "100%" }}
+              whileInView={{ y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="text-xs font-mono tracking-[0.3em] uppercase text-[#C5A059] font-medium block mb-3"
+            >
+              07 / The Inquiry
+            </motion.span>
+          </div>
+          <div className="overflow-hidden py-1">
+            <motion.h2
+              initial={{ y: "100%" }}
+              whileInView={{ y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="font-serif text-4xl md:text-5xl tracking-tight font-semibold"
+            >
+              Book A Spatial Consultation
+            </motion.h2>
+          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="text-sm text-[#1C1A17]/60 mt-4 font-light leading-relaxed"
+          >
             Begin your spatial design journey. Submit your project requirements, estimated location, and budget details to coordinate a personal call with Muskan.
-          </p>
+          </motion.p>
         </div>
 
         {/* Luxury Glass Form Card */}
-        <div className="bg-[#FAF9F6]/90 border border-[#E5DEC9] backdrop-blur-xl p-8 md:p-12 shadow-2xl relative">
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-[#FAF9F6]/90 border border-[#E5DEC9] backdrop-blur-xl p-8 md:p-12 shadow-2xl relative">
           <AnimatePresence mode="wait">
             
             {formStatus === "idle" || formStatus === "submitting" ? (
@@ -283,7 +310,7 @@ export default function ConsultationForm() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
+        </motion.div>
 
       </div>
     </section>

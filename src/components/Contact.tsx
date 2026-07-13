@@ -53,7 +53,13 @@ export default function Contact() {
           <div className="lg:col-span-5 space-y-8">
             
             {/* Location Card: Mumbai */}
-            <div className="p-8 bg-[#FAF9F6] border border-[#E5DEC9] relative group">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.7 }}
+              className="p-8 bg-[#FAF9F6] border border-[#E5DEC9] relative group"
+            >
               <span className="text-[10px] font-mono tracking-widest text-[#C5A059] font-bold uppercase">
                 Primary Atelier
               </span>
@@ -79,10 +85,16 @@ export default function Contact() {
                   </a>
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* Location Card: Gurugram */}
-            <div className="p-8 bg-[#FAF9F6] border border-[#E5DEC9] relative group">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              className="p-8 bg-[#FAF9F6] border border-[#E5DEC9] relative group"
+            >
               <span className="text-[10px] font-mono tracking-widest text-[#C5A059] font-bold uppercase">
                 North Division
               </span>
@@ -108,10 +120,16 @@ export default function Contact() {
                   </a>
                 </p>
               </div>
-            </div>
+            </motion.div>
 
             {/* WhatsApp Messenger & Social Actions */}
-            <div className="p-8 bg-[#FAF9F6] border border-[#E5DEC9] space-y-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="p-8 bg-[#FAF9F6] border border-[#E5DEC9] space-y-6"
+            >
               <h4 className="text-[10px] font-mono tracking-widest text-[#C5A059] uppercase font-bold">
                 Instant Channels
               </h4>
@@ -164,12 +182,18 @@ export default function Contact() {
                   })}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
           </div>
 
           {/* Right Column: Interactive Styled IFrame Maps */}
-          <div className="lg:col-span-7 h-[450px] lg:h-[600px] border border-[#E5DEC9] bg-neutral-100 overflow-hidden shadow-2xl relative">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 h-[450px] lg:h-[600px] border border-[#E5DEC9] bg-neutral-100 overflow-hidden shadow-2xl relative"
+          >
             <iframe
               title="Muskan Singh Atelier Mumbai"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m4!2sMalabar+Hill+Mumbai!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7cf16715b497b%3A0xe5a363ee0482dc43!2sMalabar+Hill%2C+Mumbai%2C+Maharashtra!5e0!3m2!1sen!2sin!4v1710000000000"
@@ -189,7 +213,7 @@ export default function Contact() {
                 Open for physical client materials audits by verified booking schedule.
               </p>
             </div>
-          </div>
+          </motion.div>
 
         </div>
 

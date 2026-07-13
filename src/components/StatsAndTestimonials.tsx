@@ -1,10 +1,19 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { testimonialsData } from "../data";
 import { ChevronLeft, ChevronRight, Quote, Star } from "lucide-react";
 
 export default function StatsAndTestimonials() {
   const [activeIdx, setActiveIdx] = useState(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Track scroll through the card to drive a subtle parallax on the decorative quote mark
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"],
+  });
+  const quoteY = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+  const quoteRotate = useTransform(scrollYProgress, [0, 1], [-8, 8]);
 
   const handlePrev = () => {
     setActiveIdx((prev) => (prev === 0 ? testimonialsData.length - 1 : prev - 1));
@@ -55,12 +64,22 @@ export default function StatsAndTestimonials() {
         </div>
 
         {/* Cinematic Review Showcase */}
-        <div className="max-w-5xl mx-auto relative bg-[#FAF9F6] border border-[#E5DEC9] p-8 md:p-16 shadow-2xl overflow-hidden">
-          
-          {/* Subtle Decorative Background Quote Icon */}
-          <div className="absolute top-10 right-10 text-[#B5945B]/5 pointer-events-none">
+        <motion.div
+          ref={cardRef}
+          initial={{ opacity: 0, y: 40, scale: 0.97 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-5xl mx-auto relative bg-[#FAF9F6] border border-[#E5DEC9] p-8 md:p-16 shadow-2xl overflow-hidden"
+        >
+
+          {/* Subtle Decorative Background Quote Icon with scroll parallax */}
+          <motion.div
+            style={{ y: quoteY, rotate: quoteRotate }}
+            className="absolute top-10 right-10 text-[#B5945B]/5 pointer-events-none"
+          >
             <Quote className="w-48 h-48 stroke-[1]" />
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
             
@@ -159,7 +178,7 @@ export default function StatsAndTestimonials() {
             </div>
 
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </section>

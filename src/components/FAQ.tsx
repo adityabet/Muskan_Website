@@ -52,8 +52,12 @@ export default function FAQ() {
             const isOpen = openIndex === index;
 
             return (
-              <div
+              <motion.div
                 key={index}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.6, delay: index * 0.08 }}
                 className="border-b border-[#E5DEC9]/60 pb-6 pt-2"
               >
                 <button
@@ -92,7 +96,7 @@ export default function FAQ() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
             );
           })}
         </div>
