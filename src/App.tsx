@@ -27,13 +27,45 @@ export default function App() {
     localStorage.setItem("theme", "light");
   }, []);
 
+  const [loadedCount, setLoadedCount] = useState(0);
+  const [minimumTimeElapsed, setMinimumTimeElapsed] = useState(false);
+
   // Simulate premium intro loader
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false);
+      setMinimumTimeElapsed(true);
     }, 2200);
     return () => clearTimeout(timer);
   }, []);
+
+  // Preload all 65 cinematic frames
+  useEffect(() => {
+    let loaded = 0;
+    const total = 65;
+    const images: HTMLImageElement[] = [];
+
+    for (let i = 1; i <= total; i++) {
+      const img = new Image();
+      const num = String(i).padStart(2, "0");
+      img.src = `/60FPS/frame_${num}.jpg`;
+      
+      const onImageLoad = () => {
+        loaded++;
+        setLoadedCount(loaded);
+      };
+
+      img.onload = onImageLoad;
+      img.onerror = onImageLoad; // count errors too so we don't get stuck
+      images.push(img);
+    }
+  }, []);
+
+  // Hide loader only when both minimum time has passed and frames are fully loaded
+  useEffect(() => {
+    if (minimumTimeElapsed && loadedCount >= 65) {
+      setIsLoading(false);
+    }
+  }, [minimumTimeElapsed, loadedCount]);
 
   // Initialize Lenis for smooth momentum-scrolling
   useEffect(() => {
@@ -121,10 +153,10 @@ export default function App() {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 0.5 }}
-                transition={{ duration: 0.6, delay: 1.2 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
                 className="text-[9px] font-mono tracking-widest uppercase mt-4"
               >
-                Loading Spatial Geometries...
+                Loading Spatial Geometries... {Math.round((loadedCount / 65) * 100)}%
               </motion.p>
             </div>
           </motion.div>
