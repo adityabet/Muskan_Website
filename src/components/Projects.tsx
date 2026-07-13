@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { projectsData } from "../data";
 import { Project } from "../types";
@@ -86,12 +86,31 @@ function ProjectCard({ project, idx, getBentoClasses, onClick }: ProjectCardProp
 export default function Projects() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const backdropMouseDownTarget = useRef<EventTarget | null>(null);
 
   const categories = ["All", "Residential Interiors", "Luxury Villas", "Apartments", "Kitchen Design", "Commercial Interiors"];
 
   const filteredProjects = activeCategory === "All"
     ? projectsData
     : projectsData.filter(p => p.category === activeCategory);
+
+  // Close the detail modal with Escape, and lock page scroll while it's open
+  useEffect(() => {
+    if (!selectedProject) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedProject(null);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [selectedProject]);
 
   // Layout classes to make a custom asymmetrical bento/masonry layout
   const getBentoClasses = (index: number): string => {
@@ -215,24 +234,34 @@ export default function Projects() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            onMouseDown={(e) => { backdropMouseDownTarget.current = e.target; }}
+            onClick={(e) => {
+              // Only dismiss when the click both starts and ends on the bare backdrop —
+              // guards against a drag/scroll gesture over the backdrop closing the modal.
+              if (e.target === e.currentTarget && backdropMouseDownTarget.current === e.currentTarget) {
+                setSelectedProject(null);
+              }
+            }}
             className="fixed inset-0 z-50 bg-[#FAF9F6]/90 backdrop-blur-xl p-4 md:p-10 flex items-center justify-center overflow-y-auto"
           >
+            {/* Close Button — fixed to the viewport so it's always reachable, even mid-scroll */}
+            <button
+              onClick={() => setSelectedProject(null)}
+              className="fixed top-4 right-4 md:top-6 md:right-6 p-3 rounded-full bg-[#1C1A17] hover:bg-[#B5945B] z-[60] cursor-pointer text-[#FAF9F6] transition-colors shadow-lg"
+              data-cursor="tap"
+              aria-label="Close project details"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
             <motion.div
               initial={{ opacity: 0, y: 50, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 50, scale: 0.95 }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
               className="bg-[#FAF9F6] text-[#1C1A17] w-full max-w-6xl rounded-none shadow-2xl overflow-hidden relative border border-[#E5DEC9] my-8"
             >
-              {/* Close Button */}
-              <button
-                onClick={() => setSelectedProject(null)}
-                className="absolute top-6 right-6 p-3 rounded-full bg-[#1C1A17]/5 hover:bg-[#1C1A17]/10 z-40 cursor-pointer text-[#1C1A17] transition-colors border border-[#E5DEC9]/40 shadow-md"
-                data-cursor="tap"
-              >
-                <X className="w-5 h-5" />
-              </button>
-
               <div className="grid grid-cols-1 lg:grid-cols-12">
                 {/* Left Side: Large image or before/after */}
                 <div className="lg:col-span-7 relative h-[350px] lg:h-auto min-h-[450px] bg-neutral-100 border-b lg:border-b-0 lg:border-r border-[#E5DEC9]">

@@ -11,9 +11,7 @@ export default function Navbar() {
   const navItems = [
     { id: "hero", label: "Home" },
     { id: "about", label: "Muskan" },
-    { id: "services", label: "Services" },
     { id: "projects", label: "Projects" },
-    { id: "process", label: "Process" },
     { id: "testimonials", label: "Stories" },
     { id: "contact", label: "Inquire" },
   ];

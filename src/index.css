@@ -14,18 +14,19 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 #root {
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
+  overflow-y: visible;
 }
 
 img,
@@ -33,24 +34,22 @@ video {
   max-width: 100%;
 }
 
-/* Hide native scrollbar but keep functionality for a ultra-clean look if desired, or styled elegantly */
+/* Slim, transparent-track scrollbar so it never shows a color seam against dark sections */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #FAF9F6;
-}
-.dark ::-webkit-scrollbar-track {
-  background: #0D0D0C;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #E5DEC9;
-}
-.dark ::-webkit-scrollbar-thumb {
-  background: #2C2621;
+  background: rgba(197, 160, 89, 0.5);
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #B5945B;
+}
+
+html {
+  scrollbar-color: rgba(197, 160, 89, 0.5) transparent;
 }
 
 /* Elite Cursor Overrides for Desktop mouse devices */

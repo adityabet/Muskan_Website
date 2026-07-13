@@ -1,119 +1,133 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, useSpring } from "motion/react";
-import { Play, Sparkles } from "lucide-react";
+
+const FRAME_COUNT = 24;
+const framePaths = Array.from(
+  { length: FRAME_COUNT },
+  (_, i) => `/cinematic-frames/frame_${String(i + 1).padStart(2, "0")}.jpg`
+);
 
 export default function CinematicVideo() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [frame, setFrame] = useState(1);
 
-  // Track scroll within this section
+  // Scroll tracking: "start start" / "end end" pins the section for its full
+  // scroll track height, exactly like the Hero — the section stays stuck while
+  // the frames scrub slowly underneath, instead of scrolling straight past.
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "end start"],
+    offset: ["start start", "end end"],
   });
 
   // Smooth scroll progress to simulate ultra-fluid 70FPS cinematic feedback
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 85,
-    damping: 22,
-    restDelta: 0.001,
+    stiffness: 100,
+    damping: 30,
+    mass: 0.8,
   });
 
   // Animated scaling & corner morphing to make it incredibly immersive
-  const containerWidth = useTransform(smoothProgress, [0, 0.5, 1], ["90%", "100%", "90%"]);
   const containerScale = useTransform(smoothProgress, [0, 0.5, 1], [0.95, 1.05, 0.95]);
   const borderRadius = useTransform(smoothProgress, [0, 0.5, 1], ["24px", "0px", "24px"]);
-  const videoScale = useTransform(smoothProgress, [0, 0.5, 1], [1.15, 1.0, 1.15]);
-  const textY = useTransform(smoothProgress, [0.1, 0.5, 0.9], [40, 0, -40]);
-  const textOpacity = useTransform(smoothProgress, [0.1, 0.45, 0.55, 0.9], [0, 1, 1, 0]);
+  const frameScale = useTransform(smoothProgress, [0, 0.5, 1], [1.15, 1.0, 1.15]);
 
-  // Keep the video loop running beautifully at full frame rate
+  // Preload every frame so scrubbing never flickers or waits on a network fetch
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 1.0;
-      videoRef.current.play().catch(() => {});
-    }
+    framePaths.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
   }, []);
+
+  // Scrub through the photo sequence in lockstep with scroll, lerped for buttery motion
+  useEffect(() => {
+    let targetFrame = 0;
+    let currentFrame = 0;
+    let displayedFrame = 0;
+    let rafId: number;
+
+    const unsubscribe = smoothProgress.on("change", (latest) => {
+      targetFrame = latest * (FRAME_COUNT - 1);
+    });
+
+    const tick = () => {
+      currentFrame += (targetFrame - currentFrame) * 0.08;
+      const rounded = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(currentFrame)));
+      if (rounded !== displayedFrame) {
+        displayedFrame = rounded;
+        setFrame(rounded + 1);
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+
+    rafId = requestAnimationFrame(tick);
+
+    return () => {
+      unsubscribe();
+      cancelAnimationFrame(rafId);
+    };
+  }, [smoothProgress]);
 
   return (
     <section
       id="cinematic-interlude"
       ref={sectionRef}
-      className="py-24 bg-[#0D0D0C] text-[#FAF9F6] relative overflow-hidden flex flex-col items-center justify-center min-h-[90vh]"
+      className="relative h-[400vh] w-full bg-[#0D0D0C]"
     >
-      {/* Decorative Top Line */}
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-[#FAF9F6]/10" />
+      {/* Sticky viewport container - keeps the symphony pinned while scrubbing */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center bg-[#0D0D0C] text-[#FAF9F6] pt-24 sm:pt-28 pb-6">
 
-      {/* Chapter Indicator Header */}
-      <div className="text-center mb-10 z-20 px-6 max-w-xl">
-        <span className="text-[10px] font-mono tracking-[0.4em] uppercase text-[#C5A059] mb-3 block font-semibold">
-          Symphony IV / Motion
-        </span>
-        <h2 className="font-serif text-3xl sm:text-4xl tracking-tight font-medium mb-2">
-          Living Cinematic Walkthrough
-        </h2>
-        <p className="text-xs text-[#FAF9F6]/50 font-light leading-relaxed">
-          Experience spatial warmth in continuous, hyper-smooth frame rates.
-        </p>
-      </div>
+        {/* Decorative Top Line */}
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-[#FAF9F6]/10" />
 
-      {/* Fluid Parallax Video Frame */}
-      <div className="w-full h-[55vh] sm:h-[65vh] md:h-[75vh] flex items-center justify-center relative">
-        <motion.div
-          style={{
-            width: containerWidth,
-            scale: containerScale,
-            borderRadius: borderRadius,
-          }}
-          className="h-full overflow-hidden relative shadow-2xl border border-[#FAF9F6]/10 aspect-video max-w-7xl"
-        >
-          {/* High-definition, high frame rate cinematic video */}
-          <motion.video
-            ref={videoRef}
-            src="https://player.vimeo.com/external/393132641.hd.mp4?s=cfd9432e604f21db597d627c27774ff0ba47372c&profile_id=170&oauth2_token_id=57447761"
-            poster="https://images.unsplash.com/photo-1618219908412-a29a1bb7b86e?auto=format&fit=crop&q=80&w=2200"
-            style={{ scale: videoScale }}
-            muted
-            loop
-            playsInline
-            autoPlay
-            preload="auto"
-            className="w-full h-full object-cover brightness-[0.45] contrast-[1.05]"
-          />
+        {/* Chapter Indicator Header */}
+        <div className="text-center mb-4 sm:mb-6 z-20 px-6 max-w-xl shrink-0">
+          <span className="text-[10px] font-mono tracking-[0.4em] uppercase text-[#C5A059] mb-3 block font-semibold">
+            Symphony IV / Motion
+          </span>
+          <h2 className="font-serif text-3xl sm:text-4xl tracking-tight font-medium mb-2">
+            Living Cinematic Walkthrough
+          </h2>
+          <p className="text-xs text-[#FAF9F6]/50 font-light leading-relaxed">
+            Experience spatial warmth in continuous, hyper-smooth frame rates.
+          </p>
+        </div>
 
-          {/* Cinematic Overlay Vignette */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0C]/80 via-transparent to-[#0D0D0C]/40 pointer-events-none" />
-
-          {/* Floating Scrolling Text overlay */}
+        {/* Fluid Parallax Photo-Sequence Frame */}
+        <div className="w-full flex-1 min-h-0 flex items-center justify-center relative">
           <motion.div
-            style={{ y: textY, opacity: textOpacity }}
-            className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 pointer-events-none z-10"
+            style={{
+              scale: containerScale,
+              borderRadius: borderRadius,
+            }}
+            className="h-full max-h-[82vh] aspect-[768/1364] overflow-hidden relative shadow-2xl border border-[#FAF9F6]/10"
           >
-            <div className="flex items-center space-x-2 text-[10px] font-mono tracking-[0.3em] uppercase text-[#C5A059] mb-4">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>70FPS Cinematic Scrubbing</span>
-            </div>
-            <h3 className="font-serif text-3xl sm:text-5xl md:text-6xl tracking-wide max-w-3xl leading-snug font-extralight text-[#FAF9F6]">
-              A continuous flow of pure geometric warmth.
-            </h3>
-            <p className="text-xs sm:text-sm text-[#FAF9F6]/60 font-mono tracking-widest mt-6 uppercase">
-              Drag or scroll to control momentum
-            </p>
+            {/* High-definition photo sequence, scrubbed frame-by-frame with scroll */}
+            <motion.img
+              src={framePaths[frame - 1]}
+              style={{ scale: frameScale }}
+              className="w-full h-full object-cover brightness-[0.45] contrast-[1.05]"
+              alt="Cinematic interior walkthrough"
+            />
+
+            {/* Cinematic Overlay Vignette */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0C]/80 via-transparent to-[#0D0D0C]/40 pointer-events-none" />
+
+            {/* Golden Corner brackets — enlarged ring frame */}
+            <div className="absolute top-5 left-5 w-14 h-14 border-t-2 border-l-2 border-[#C5A059]/50 pointer-events-none" />
+            <div className="absolute top-5 right-5 w-14 h-14 border-t-2 border-r-2 border-[#C5A059]/50 pointer-events-none" />
+            <div className="absolute bottom-5 left-5 w-14 h-14 border-b-2 border-l-2 border-[#C5A059]/50 pointer-events-none" />
+            <div className="absolute bottom-5 right-5 w-14 h-14 border-b-2 border-r-2 border-[#C5A059]/50 pointer-events-none" />
           </motion.div>
+        </div>
 
-          {/* Golden Corner brackets */}
-          <div className="absolute top-6 left-6 w-8 h-8 border-t border-l border-[#C5A059]/40 pointer-events-none" />
-          <div className="absolute top-6 right-6 w-8 h-8 border-t border-r border-[#C5A059]/40 pointer-events-none" />
-          <div className="absolute bottom-6 left-6 w-8 h-8 border-b border-l border-[#C5A059]/40 pointer-events-none" />
-          <div className="absolute bottom-6 right-6 w-8 h-8 border-b border-r border-[#C5A059]/40 pointer-events-none" />
-        </motion.div>
-      </div>
+        {/* Ambient bottom caption */}
+        <div className="mt-4 sm:mt-6 px-6 text-center max-w-sm z-20 shrink-0">
+          <p className="text-[10px] font-mono tracking-[0.25em] text-[#FAF9F6]/40 uppercase">
+            Continuous camera pan • 4K UHD Master • Atmos Audio Enabled
+          </p>
+        </div>
 
-      {/* Ambient bottom caption */}
-      <div className="mt-10 px-6 text-center max-w-sm z-20">
-        <p className="text-[10px] font-mono tracking-[0.25em] text-[#FAF9F6]/40 uppercase">
-          Continuous camera pan • 4K UHD Master • Atmos Audio Enabled
-        </p>
       </div>
     </section>
   );

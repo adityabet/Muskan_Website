@@ -14,13 +14,12 @@ export default function ChapterHUD() {
   const chapters: Chapter[] = [
     { id: "hero", label: "00", name: "Preface" },
     { id: "about", label: "01", name: "The Architect" },
-    { id: "services", label: "02", name: "The Portals" },
-    { id: "cinematic-interlude", label: "03", name: "Symphony" },
-    { id: "projects", label: "04", name: "Chosen Work" },
-    { id: "process", label: "05", name: "The Journey" },
-    { id: "testimonials", label: "06", name: "Stories" },
-    { id: "consultation", label: "07", name: "Design Specifics" },
-    { id: "contact", label: "08", name: "Inquiry" },
+    { id: "cinematic-interlude", label: "02", name: "Symphony" },
+    { id: "projects", label: "03", name: "Chosen Work" },
+    { id: "process", label: "04", name: "The Journey" },
+    { id: "testimonials", label: "05", name: "Stories" },
+    { id: "consultation", label: "06", name: "Design Specifics" },
+    { id: "contact", label: "07", name: "Inquiry" },
   ];
 
   useEffect(() => {

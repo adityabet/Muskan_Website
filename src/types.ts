@@ -18,14 +18,6 @@ export interface Project {
   };
 }
 
-export interface Service {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  features: string[];
-}
-
 export interface ProcessStep {
   phase: string;
   title: string;

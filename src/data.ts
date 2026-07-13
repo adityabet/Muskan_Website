@@ -1,4 +1,4 @@
-import { Project, Service, ProcessStep, Testimonial, FAQItem, StatItem } from "./types";
+import { Project, ProcessStep, Testimonial, FAQItem, StatItem } from "./types";
 
 export const projectsData: Project[] = [
   {
@@ -87,51 +87,6 @@ export const projectsData: Project[] = [
       concept: "A highly functional social engine centering on tactile premium finishes.",
       scope: ["Custom Cabinetry", "Premium Appliances", "Calacatta Viola", "Ventilation Design"]
     }
-  }
-];
-
-export const servicesData: Service[] = [
-  {
-    id: "residential",
-    title: "Residential Interiors",
-    description: "Bespoke spatial environments customized to your daily routine. We curate modern luxury homes blending comfort and visual grace.",
-    icon: "Home",
-    features: ["Custom Spatial Layouts", "Bespoke Furniture", "Premium Texture Maps", "Lighting Schematics"]
-  },
-  {
-    id: "villas",
-    title: "Luxury Villas & estates",
-    description: "End-to-end estate creation that integrates natural landscaping and curated interiors to form monolithic residential statements.",
-    icon: "Compass",
-    features: ["Landscape-to-Interior Flow", "Outdoor Entertaining", "Premium Stone & Timber", "Custom Art Sourcing"]
-  },
-  {
-    id: "commercial",
-    title: "Commercial & Ateliers",
-    description: "Reimagining workspaces and boutiques to evoke high-end luxury brand identities, employee wellness, and client journeys.",
-    icon: "Briefcase",
-    features: ["Brand Aesthetic Integration", "Acoustic & Thermal Zoning", "Luxury Reception Design", "Dynamic Meeting Atriums"]
-  },
-  {
-    id: "turnkey",
-    title: "Turnkey Projects",
-    description: "Complete design-to-execution white-glove service managing all contracting, material sourcing, detailing, and final styling.",
-    icon: "ShieldCheck",
-    features: ["On-Site Management", "Rigorous Inspections", "Vetted Artisan Network", "Zero-Stress Budgeting"]
-  },
-  {
-    id: "furniture",
-    title: "Furniture Sourcing & Design",
-    description: "Collaborative design of custom accent items or bespoke sourcing from global showrooms across Italy, Denmark, and India.",
-    icon: "Sofa",
-    features: ["Custom Upholstery Planning", "Limited-Edition Sourcing", "Exclusive Materials", "Artisanal Millwork Drafts"]
-  },
-  {
-    id: "visualization",
-    title: "3D Spatial Visualization",
-    description: "Ultra-photorealistic cinematic 3D simulations allowing you to experience your space in perfect daylight before building.",
-    icon: "Sparkles",
-    features: ["Cinematic Light Renderings", "Interactive Walkthroughs", "Perfect Material Previews", "Structural Depth Testing"]
   }
 ];
 
