@@ -201,7 +201,7 @@ export default function Hero() {
   };
 
   const canvasScale = useTransform(smoothScrollProgress, [0, 0.36, 1], [1.05, 1, 0.93]);
-  const canvasBlur = useTransform(smoothScrollProgress, [0, 0.55, 1], ["blur(0px)", "blur(1.6px)", "blur(8px)"]);
+  const canvasBlur = useTransform(smoothScrollProgress, [0, 0.7, 1], ["blur(0px)", "blur(0px)", "blur(2.5px)"]);
   const canvasOpacity = useTransform(smoothScrollProgress, [0, 0.08, 0.82, 1], [0.92, 1, 1, 0.72]);
 
   const introOpacity = useTransform(smoothScrollProgress, [0, 0.04, 0.18], [1, 0.82, 0]);
@@ -245,7 +245,7 @@ export default function Hero() {
             style={{ scale: canvasScale, filter: canvasBlur, opacity: canvasOpacity }}
             className="flex h-full w-full items-center justify-center will-change-transform"
           >
-            <canvas ref={canvasRef} className="pointer-events-none h-full w-full object-cover brightness-[0.38] contrast-[1.05]" />
+            <canvas ref={canvasRef} className="pointer-events-none h-full w-full object-cover brightness-[0.68] contrast-[1.05]" />
           </motion.div>
         </div>
 
@@ -266,8 +266,8 @@ export default function Hero() {
           }}
         />
 
-        <div className="pointer-events-none absolute inset-0 z-[5] bg-gradient-to-t from-[#0D0D0C] via-transparent to-[#0D0D0C]/40" />
-        <div className="pointer-events-none absolute inset-0 z-[5] bg-[linear-gradient(120deg,rgba(13,13,12,0.35),transparent,rgba(13,13,12,0.3))]" />
+        <div className="pointer-events-none absolute inset-0 z-[5] bg-gradient-to-t from-[#0D0D0C]/85 via-transparent to-[#0D0D0C]/25" />
+        <div className="pointer-events-none absolute inset-0 z-[5] bg-[linear-gradient(120deg,rgba(13,13,12,0.2),transparent,rgba(13,13,12,0.18))]" />
 
         <div className="absolute inset-0 z-20 flex items-center justify-center px-5 sm:px-8">
           <div className="relative flex h-[72vh] w-full max-w-6xl flex-col justify-center">
