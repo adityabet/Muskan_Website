@@ -122,7 +122,7 @@ export const processStepsData: ProcessStep[] = [
   {
     phase: "05",
     title: "Execution & Handover",
-    description: "Rigorous physical manifestation. Muskan personally oversees alignments, skilled installations, and custom styling.",
+    description: "Rigorous physical manifestation. Gunjan personally oversees alignments, skilled installations, and custom styling.",
     timeline: "Month 4 - 6",
     details: ["Rigorous Contractor Checklists", "Acoustic & Light Alignments", "Final Accessories Styling"]
   }
@@ -134,7 +134,7 @@ export const testimonialsData: Testimonial[] = [
     name: "Kabir & Priya Mehta",
     role: "Founders",
     company: "Studio Indigo",
-    content: "Muskan made our house an emotional sanctuary. She blended Scandinavian comfort with luxurious materials like Roman Travertine.",
+    content: "Gunjan made our house an emotional sanctuary. She blended Scandinavian comfort with luxurious materials like Roman Travertine.",
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=500",
     rating: 5
   },

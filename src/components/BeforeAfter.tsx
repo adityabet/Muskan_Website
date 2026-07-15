@@ -14,7 +14,7 @@ export default function BeforeAfter({
   afterImage,
   heightClass = "aspect-[16/10] w-full",
   beforeLabel = "Original Site",
-  afterLabel = "Muskan Singh Atelier"
+  afterLabel = "Gunjan Singh Atelier"
 }: BeforeAfterProps) {
   const [sliderPosition, setSliderPosition] = useState(50);
   const [isDragging, setIsDragging] = useState(false);

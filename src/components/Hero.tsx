@@ -278,7 +278,7 @@ export default function Hero() {
               style={{ opacity: introOpacity, y: introY, scale: introScale }}
               className="max-w-3xl space-y-4 text-left"
             >
-              <p className="text-[10px] font-mono uppercase tracking-[0.42em] text-[#C5A059]">Muskan Singh Studio</p>
+              <p className="text-[10px] font-mono uppercase tracking-[0.42em] text-[#C5A059]">Gunjan Singh Studio</p>
               <h1 className="font-serif text-4xl leading-[0.9] text-[#FAF9F6] sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.4rem]">
                 Sculpting Sensory Spaces
               </h1>

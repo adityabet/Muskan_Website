@@ -357,7 +357,7 @@ export default function Projects() {
                   {/* Booking Link / Modal Footer */}
                   <div className="mt-12 pt-6 border-t border-[#E5DEC9] flex justify-between items-center">
                     <span className="text-[10px] font-mono tracking-widest text-[#1C1A17]/40 uppercase">
-                      Muskan Singh Studio ©2026
+                      Gunjan Singh Studio ©2026
                     </span>
                     <button
                       onClick={() => {

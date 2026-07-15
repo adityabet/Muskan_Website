@@ -80,8 +80,8 @@ export default function Contact() {
                 </p>
                 <p className="flex items-center">
                   <Mail className="w-4 h-4 mr-3 text-[#C5A059]" />
-                  <a href="mailto:mumbai@muskansingh.com" className="hover:text-[#C5A059] transition-colors">
-                    mumbai@muskansingh.com
+                  <a href="mailto:mumbai@gunjansingh.com" className="hover:text-[#C5A059] transition-colors">
+                    mumbai@gunjansingh.com
                   </a>
                 </p>
               </div>
@@ -115,8 +115,8 @@ export default function Contact() {
                 </p>
                 <p className="flex items-center">
                   <Mail className="w-4 h-4 mr-3 text-[#C5A059]" />
-                  <a href="mailto:ncr@muskansingh.com" className="hover:text-[#C5A059] transition-colors">
-                    ncr@muskansingh.com
+                  <a href="mailto:ncr@gunjansingh.com" className="hover:text-[#C5A059] transition-colors">
+                    ncr@gunjansingh.com
                   </a>
                 </p>
               </div>
@@ -149,7 +149,7 @@ export default function Contact() {
 
                 {/* Direct email button */}
                 <a
-                  href="mailto:studio@muskansingh.com"
+                  href="mailto:studio@gunjansingh.com"
                   className="flex-1 flex items-center justify-center space-x-3 py-3.5 border border-[#1C1A17] hover:bg-[#1C1A17] hover:text-white text-xs font-mono tracking-wider uppercase transition-all duration-300"
                   data-cursor="tap"
                 >
@@ -195,7 +195,7 @@ export default function Contact() {
             className="lg:col-span-7 h-[450px] lg:h-[600px] border border-[#E5DEC9] bg-neutral-100 overflow-hidden shadow-2xl relative"
           >
             <iframe
-              title="Muskan Singh Atelier Mumbai"
+              title="Gunjan Singh Atelier Mumbai"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1m4!2sMalabar+Hill+Mumbai!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be7cf16715b497b%3A0xe5a363ee0482dc43!2sMalabar+Hill%2C+Mumbai%2C+Maharashtra!5e0!3m2!1sen!2sin!4v1710000000000"
               width="100%"
               height="100%"

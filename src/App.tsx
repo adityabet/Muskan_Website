@@ -137,7 +137,7 @@ export default function App() {
                   transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
                   className="font-serif text-3xl sm:text-4xl md:text-5xl tracking-[0.18em] uppercase font-semibold"
                 >
-                  Muskan Singh
+                  Gunjan Singh
                 </motion.h1>
               </div>
 

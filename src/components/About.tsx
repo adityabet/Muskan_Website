@@ -59,7 +59,7 @@ export default function About() {
     {
       year: "2018",
       title: "Establishing the Atelier",
-      desc: "Founded Muskan Singh Atelier in Mumbai, focusing on clean spatial geometries and authentic Indian stone craftsmanship."
+      desc: "Founded Gunjan Singh Atelier in Mumbai, focusing on clean spatial geometries and authentic Indian stone craftsmanship."
     },
     {
       year: "2020",
@@ -108,7 +108,7 @@ export default function About() {
                 transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
                 className="font-serif text-4xl sm:text-5xl md:text-6xl tracking-tight font-semibold"
               >
-                Muskan Singh
+                Gunjan Singh
               </motion.h2>
             </div>
           </div>
@@ -131,13 +131,13 @@ export default function About() {
                   filter: imgFilter,
                 }}
                 src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=1200"
-                alt="Muskan Singh Portrait"
+                alt="Gunjan Singh Portrait"
                 className="w-full h-full object-cover object-top"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-[#C5A059]/10 mix-blend-color pointer-events-none" />
               <div className="absolute bottom-6 left-6 z-10 text-white drop-shadow-md">
-                <p className="font-serif text-lg tracking-wide">Muskan Singh</p>
+                <p className="font-serif text-lg tracking-wide">Gunjan Singh</p>
                 <p className="text-[10px] font-mono tracking-widest uppercase text-[#FAF9F6]/80 mt-1">
                   Creative Director
                 </p>
@@ -161,7 +161,7 @@ export default function About() {
             {/* Story description */}
             <div className="space-y-6 text-[#1C1A17]/80 font-sans font-light leading-relaxed text-sm sm:text-base">
               <p>
-                Muskan Singh designs with deep reverence for architectural symmetry and organic tactile textures. Having crafted spaces across Milan and Mumbai, her studio sculpts homes that are both ergonomically functional and visually majestic.
+                Gunjan Singh designs with deep reverence for architectural symmetry and organic tactile textures. Having crafted spaces across Milan and Mumbai, her studio sculpts homes that are both ergonomically functional and visually majestic.
               </p>
               <p>
                 Avoiding ready-made design models, each space blends raw travertine slabs, handwoven textiles, unlacquered brass, and smart home systems to create warm, cozy, yet distinctly premium homes.

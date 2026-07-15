@@ -10,7 +10,7 @@ export default function Navbar() {
 
   const navItems = [
     { id: "hero", label: "Home" },
-    { id: "about", label: "Muskan" },
+    { id: "about", label: "Gunjan" },
     { id: "projects", label: "Projects" },
     { id: "testimonials", label: "Stories" },
     { id: "contact", label: "Inquire" },
@@ -69,7 +69,7 @@ export default function Navbar() {
               <span className={`font-serif text-lg md:text-xl tracking-[0.18em] uppercase font-semibold transition-colors duration-300 ${
                 isScrolled ? "text-[#1C1A17]" : "text-white"
               }`}>
-                Muskan Singh
+                Gunjan Singh
               </span>
               <span className="text-[9px] font-mono tracking-[0.25em] uppercase text-[#C5A059] font-medium mt-0.5">
                 Interior Architecture
@@ -190,7 +190,7 @@ export default function Navbar() {
                   Book A Consultation
                 </button>
                 <div className="flex justify-between text-[10px] font-mono tracking-widest text-[#1C1A17]/40 uppercase pt-4">
-                  <span>Muskan Singh studio ©2026</span>
+                  <span>Gunjan Singh studio ©2026</span>
                   <span>luxury interiors</span>
                 </div>
               </motion.div>

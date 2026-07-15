@@ -75,7 +75,7 @@ export default function ConsultationForm() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-sm text-[#1C1A17]/60 mt-4 font-light leading-relaxed"
           >
-            Begin your spatial design journey. Submit your project requirements, estimated location, and budget details to coordinate a personal call with Muskan.
+            Begin your spatial design journey. Submit your project requirements, estimated location, and budget details to coordinate a personal call with Gunjan.
           </motion.p>
         </div>
 

@@ -32,7 +32,7 @@ export default function Footer() {
           <div className="lg:col-span-5 space-y-6">
             <div className="flex flex-col">
               <span className="font-serif text-2xl tracking-[0.18em] uppercase font-semibold">
-                Muskan Singh
+                Gunjan Singh
               </span>
               <span className="text-[10px] font-mono tracking-[0.25em] uppercase text-[#C5A059] font-semibold mt-1">
                 Interior Architecture Studio
@@ -90,7 +90,7 @@ export default function Footer() {
                 </button>
               </li>
               <li>
-                <a href="mailto:studio@muskansingh.com" className="hover:text-[#C5A059] transition-colors">
+                <a href="mailto:studio@gunjansingh.com" className="hover:text-[#C5A059] transition-colors">
                   Join The Team
                 </a>
               </li>
@@ -117,13 +117,13 @@ export default function Footer() {
             style={{ scale: wordmarkScale, opacity: wordmarkOpacity }}
             className="font-serif text-[4.5rem] sm:text-[8rem] md:text-[11rem] lg:text-[14rem] tracking-[0.06em] text-center uppercase leading-none font-bold text-[#E5DEC9]/30 transition-colors duration-500"
           >
-            Muskan
+            Gunjan
           </motion.h1>
         </div>
 
         {/* Bottom row copyrights */}
         <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] font-mono text-[#1C1A17]/40 uppercase tracking-widest">
-          <p>©2026 Muskan Singh Studio. All rights reserved.</p>
+          <p>©2026 Gunjan Singh Studio. All rights reserved.</p>
           <div className="flex space-x-6">
             <a href="#privacy" className="hover:text-[#C5A059] transition-colors">Privacy Policy</a>
             <span>•</span>
