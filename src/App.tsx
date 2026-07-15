@@ -7,7 +7,6 @@ import CustomCursor from "./components/CustomCursor";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import About from "./components/About";
-import CinematicVideo from "./components/CinematicVideo";
 import Projects from "./components/Projects";
 import StatsAndTestimonials from "./components/StatsAndTestimonials";
 import InspirationGrid from "./components/InspirationGrid";
@@ -176,9 +175,6 @@ export default function App() {
 
           {/* About */}
           <About />
-
-          {/* Cinematic Scroll Video Interlude */}
-          <CinematicVideo />
 
           {/* Featured Projects (with Before/After slide compare) */}
           <Projects />
