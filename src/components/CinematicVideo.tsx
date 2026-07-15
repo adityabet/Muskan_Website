@@ -1,88 +1,58 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
+import { motion, useMotionValue, animate } from "motion/react";
+import { ChevronLeft, ChevronRight, MoveHorizontal } from "lucide-react";
 
 const FRAME_COUNT = 24;
 const framePath = (n: number) => `/cinematic-frames/frame_${String(n).padStart(2, "0")}.jpg`;
-const framePaths = Array.from({ length: FRAME_COUNT }, (_, i) => framePath(i + 1));
+const frames = Array.from({ length: FRAME_COUNT }, (_, i) => framePath(i + 1));
 
-// Covers the AI-generation watermark baked into the bottom edge of the source frames
-// with a soft cinematic letterbox fade, rather than trying to crop it out pixel-precisely.
+// Covers the AI-generation watermark baked into the bottom edge of the source frames.
 function WatermarkGuard() {
   return (
-    <div className="absolute bottom-0 left-0 w-full h-[11%] bg-gradient-to-t from-[#0D0D0C] from-45% to-transparent pointer-events-none z-[1]" />
+    <div className="absolute bottom-0 left-0 w-full h-[12%] bg-gradient-to-t from-[#0D0D0C] from-45% to-transparent pointer-events-none" />
+  );
+}
+
+function SprocketRow() {
+  return (
+    <div className="hidden sm:flex items-center gap-3 px-1 opacity-30">
+      {Array.from({ length: 28 }).map((_, i) => (
+        <span key={i} className="h-1.5 w-1.5 shrink-0 rounded-[2px] bg-[#C5A059]" />
+      ))}
+    </div>
   );
 }
 
 export default function CinematicVideo() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [frame, setFrame] = useState(1);
-
-  // Raw cursor offset (-0.5 to 0.5) across the card, sprung for a smooth 3D tilt
-  const pointerX = useMotionValue(0);
-  const pointerY = useMotionValue(0);
-  const springConfig = { stiffness: 150, damping: 18, mass: 0.6 };
-  const rotateX = useSpring(useTransform(pointerY, [-0.5, 0.5], [12, -12]), springConfig);
-  const rotateY = useSpring(useTransform(pointerX, [-0.5, 0.5], [-12, 12]), springConfig);
-
-  const handlePointerMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = cardRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    pointerX.set((e.clientX - rect.left) / rect.width - 0.5);
-    pointerY.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
-
-  const handlePointerLeave = () => {
-    pointerX.set(0);
-    pointerY.set(0);
-  };
-
-  // Gentle scroll-cinematic: the primary card scrubs through the frame sequence as the
-  // section passes through the viewport — no pinning, just a normal-flow scroll tie-in.
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const smoothProgress = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.6 });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const [maxDrag, setMaxDrag] = useState(0);
 
   useEffect(() => {
-    framePaths.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
+    const measure = () => {
+      if (!containerRef.current || !stripRef.current) return;
+      const overflow = stripRef.current.scrollWidth - containerRef.current.offsetWidth;
+      setMaxDrag(Math.max(0, overflow));
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
   }, []);
 
-  useEffect(() => {
-    let targetFrame = 0;
-    let currentFrame = 0;
-    let displayedFrame = 0;
-    let rafId: number;
-
-    const unsubscribe = smoothProgress.on("change", (latest) => {
-      targetFrame = latest * (FRAME_COUNT - 1);
-    });
-
-    const tick = () => {
-      currentFrame += (targetFrame - currentFrame) * 0.1;
-      const rounded = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(currentFrame)));
-      if (rounded !== displayedFrame) {
-        displayedFrame = rounded;
-        setFrame(rounded + 1);
-      }
-      rafId = requestAnimationFrame(tick);
-    };
-
-    rafId = requestAnimationFrame(tick);
-    return () => {
-      unsubscribe();
-      cancelAnimationFrame(rafId);
-    };
-  }, [smoothProgress]);
+  const nudge = (direction: "left" | "right") => {
+    const step = 260;
+    const current = x.get();
+    const next =
+      direction === "left"
+        ? Math.min(0, current + step)
+        : Math.max(-maxDrag, current - step);
+    animate(x, next, { type: "spring", stiffness: 260, damping: 32 });
+  };
 
   return (
     <section
       id="cinematic-interlude"
-      ref={sectionRef}
       className="py-24 md:py-32 bg-[#0D0D0C] text-[#FAF9F6] overflow-hidden relative"
     >
       <div className="absolute top-0 left-0 w-full h-[1px] bg-[#FAF9F6]/10" />
@@ -90,7 +60,7 @@ export default function CinematicVideo() {
       <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
 
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16 md:mb-20">
+        <div className="text-center max-w-2xl mx-auto mb-14 md:mb-16">
           <div className="overflow-hidden inline-block mx-auto">
             <motion.span
               initial={{ y: "100%" }}
@@ -108,9 +78,9 @@ export default function CinematicVideo() {
               whileInView={{ y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="font-serif text-3xl sm:text-4xl tracking-tight font-medium"
+              className="font-serif text-3xl sm:text-4xl md:text-5xl tracking-tight font-medium"
             >
-              Living Cinematic Walkthrough
+              24 Frames Per Second
             </motion.h2>
           </div>
           <motion.p
@@ -120,117 +90,96 @@ export default function CinematicVideo() {
             transition={{ duration: 0.6, delay: 0.25 }}
             className="text-xs sm:text-sm text-[#FAF9F6]/50 font-light leading-relaxed mt-4"
           >
-            Experience spatial warmth through a living gallery that scrubs into focus as you scroll.
+            Every still from the walkthrough, cut into a living reel. Drag it, or click through frame by frame.
           </motion.p>
         </div>
+      </div>
 
-        {/* Motion Card Stack */}
-        <div
-          className="relative flex items-center justify-center py-6"
-          style={{ perspective: "1800px" }}
-        >
-          {/* Accent card — left, drifting behind the primary card */}
+      {/* Film Reel */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+        className="relative"
+      >
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <SprocketRow />
+        </div>
+
+        <div ref={containerRef} className="relative overflow-hidden py-3">
+          {/* Edge fade masks */}
+          <div className="pointer-events-none absolute left-0 top-0 z-20 h-full w-10 md:w-24 bg-gradient-to-r from-[#0D0D0C] to-transparent" />
+          <div className="pointer-events-none absolute right-0 top-0 z-20 h-full w-10 md:w-24 bg-gradient-to-l from-[#0D0D0C] to-transparent" />
+
           <motion.div
-            initial={{ opacity: 0, x: -40, rotate: -14 }}
-            whileInView={{ opacity: 1, x: 0, rotate: -10 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.9, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden md:block absolute left-1/2 -translate-x-[220px] w-[210px] aspect-[768/1364] rounded-[22px] overflow-hidden shadow-xl border border-white/10 z-0"
+            ref={stripRef}
+            drag="x"
+            dragConstraints={{ left: -maxDrag, right: 0 }}
+            dragElastic={0.06}
+            style={{ x }}
+            className="flex w-max gap-4 md:gap-5 px-6 md:px-12 cursor-grab active:cursor-grabbing"
           >
-            <motion.img
-              src={framePath(5)}
-              alt=""
-              animate={{ y: [0, -16, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-              className="w-full h-full object-cover brightness-[0.35] contrast-[1.05] scale-110"
-            />
-            <div className="absolute inset-0 bg-[#0D0D0C]/35" />
-            <WatermarkGuard />
-          </motion.div>
-
-          {/* Accent card — right, drifting behind the primary card */}
-          <motion.div
-            initial={{ opacity: 0, x: 40, rotate: 14 }}
-            whileInView={{ opacity: 1, x: 0, rotate: 10 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden md:block absolute left-1/2 translate-x-[10px] w-[210px] aspect-[768/1364] rounded-[22px] overflow-hidden shadow-xl border border-white/10 z-0"
-          >
-            <motion.img
-              src={framePath(20)}
-              alt=""
-              animate={{ y: [0, 16, 0] }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-              className="w-full h-full object-cover brightness-[0.35] contrast-[1.05] scale-110"
-            />
-            <div className="absolute inset-0 bg-[#0D0D0C]/35" />
-            <WatermarkGuard />
-          </motion.div>
-
-          {/* Primary interactive motion card — tilts toward the cursor and scrubs with scroll */}
-          <motion.div
-            ref={cardRef}
-            onMouseMove={handlePointerMove}
-            onMouseLeave={handlePointerLeave}
-            initial={{ opacity: 0, y: 60, scale: 0.92 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            viewport={{ once: true, margin: "-100px" }}
-            whileHover={{ scale: 1.03 }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-            className="relative z-10 w-[240px] sm:w-[300px] md:w-[340px] aspect-[768/1364] rounded-[28px] overflow-hidden shadow-2xl border border-[#FAF9F6]/15"
-          >
-            <motion.div
-              animate={{ y: [0, -14, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-0"
-            >
-              <img
-                src={framePaths[frame - 1]}
-                alt="Cinematic interior walkthrough"
-                className="w-full h-full object-cover brightness-[0.65] contrast-[1.08] scale-105"
-              />
-            </motion.div>
-
-            {/* Ambient pulsing glow */}
-            <motion.div
-              animate={{ opacity: [0.35, 0.7, 0.35] }}
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_220px_at_50%_35%,rgba(197,160,89,0.35),transparent_70%)]"
-            />
-
-            {/* Cinematic vignette */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0C]/75 via-transparent to-[#0D0D0C]/20 pointer-events-none" />
-            <WatermarkGuard />
-
-            {/* Golden corner brackets */}
-            <div className="absolute top-5 left-5 w-10 h-10 border-t-2 border-l-2 border-[#C5A059]/60 pointer-events-none" />
-            <div className="absolute top-5 right-5 w-10 h-10 border-t-2 border-r-2 border-[#C5A059]/60 pointer-events-none" />
-            <div className="absolute bottom-5 left-5 w-10 h-10 border-b-2 border-l-2 border-[#C5A059]/60 pointer-events-none" />
-            <div className="absolute bottom-5 right-5 w-10 h-10 border-b-2 border-r-2 border-[#C5A059]/60 pointer-events-none" />
-
-            <div className="absolute bottom-6 left-0 w-full text-center px-4 pointer-events-none z-[2]">
-              <p className="text-[9px] font-mono tracking-[0.25em] uppercase text-[#FAF9F6]/70">
-                Move to explore
-              </p>
-            </div>
+            {frames.map((src, i) => (
+              <motion.div
+                key={src}
+                whileHover={{ scale: 1.05, y: -10 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="relative shrink-0 w-32 sm:w-40 md:w-48 aspect-[768/1364] rounded-xl overflow-hidden border border-[#FAF9F6]/10 shadow-xl bg-[#161513]"
+              >
+                <img
+                  src={src}
+                  alt={`Interior frame ${i + 1}`}
+                  draggable={false}
+                  className="w-full h-full object-cover brightness-[0.68] contrast-[1.08] select-none"
+                />
+                <WatermarkGuard />
+                <div className="absolute inset-0 ring-1 ring-inset ring-[#C5A059]/0 hover:ring-[#C5A059]/40 transition-all duration-300 pointer-events-none" />
+                <span className="absolute top-2.5 left-2.5 text-[9px] font-mono tracking-widest text-[#C5A059]/80">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
 
-        {/* Ambient bottom caption */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="mt-16 md:mt-20 text-center"
-        >
-          <p className="text-[9px] sm:text-[10px] font-mono tracking-[0.2em] sm:tracking-[0.25em] text-[#FAF9F6]/40 uppercase leading-relaxed">
-            Continuous camera pan • 4K UHD Master • Atmos Audio Enabled
-          </p>
-        </motion.div>
+        <div className="max-w-7xl mx-auto px-6 md:px-12">
+          <SprocketRow />
+        </div>
+      </motion.div>
 
-      </div>
+      {/* Controls */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true, margin: "-50px" }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="max-w-7xl mx-auto px-6 md:px-12 mt-10 md:mt-12 flex items-center justify-center gap-6"
+      >
+        <button
+          onClick={() => nudge("left")}
+          className="p-3 border border-[#FAF9F6]/15 hover:border-[#C5A059] rounded-full text-[#FAF9F6]/60 hover:text-[#C5A059] transition-colors cursor-pointer"
+          data-cursor="tap"
+          aria-label="Scroll reel left"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+
+        <span className="flex items-center gap-2 text-[9px] sm:text-[10px] font-mono tracking-[0.25em] uppercase text-[#FAF9F6]/40">
+          <MoveHorizontal className="w-3.5 h-3.5" />
+          Drag The Reel
+        </span>
+
+        <button
+          onClick={() => nudge("right")}
+          className="p-3 border border-[#FAF9F6]/15 hover:border-[#C5A059] rounded-full text-[#FAF9F6]/60 hover:text-[#C5A059] transition-colors cursor-pointer"
+          data-cursor="tap"
+          aria-label="Scroll reel right"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </motion.div>
+
     </section>
   );
 }
