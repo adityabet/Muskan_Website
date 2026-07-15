@@ -1,10 +1,22 @@
-import { useRef } from "react";
-import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from "motion/react";
 
+const FRAME_COUNT = 24;
 const framePath = (n: number) => `/cinematic-frames/frame_${String(n).padStart(2, "0")}.jpg`;
+const framePaths = Array.from({ length: FRAME_COUNT }, (_, i) => framePath(i + 1));
+
+// Covers the AI-generation watermark baked into the bottom edge of the source frames
+// with a soft cinematic letterbox fade, rather than trying to crop it out pixel-precisely.
+function WatermarkGuard() {
+  return (
+    <div className="absolute bottom-0 left-0 w-full h-[11%] bg-gradient-to-t from-[#0D0D0C] from-45% to-transparent pointer-events-none z-[1]" />
+  );
+}
 
 export default function CinematicVideo() {
+  const sectionRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
+  const [frame, setFrame] = useState(1);
 
   // Raw cursor offset (-0.5 to 0.5) across the card, sprung for a smooth 3D tilt
   const pointerX = useMotionValue(0);
@@ -25,9 +37,52 @@ export default function CinematicVideo() {
     pointerY.set(0);
   };
 
+  // Gentle scroll-cinematic: the primary card scrubs through the frame sequence as the
+  // section passes through the viewport — no pinning, just a normal-flow scroll tie-in.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 90, damping: 26, mass: 0.6 });
+
+  useEffect(() => {
+    framePaths.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
+  useEffect(() => {
+    let targetFrame = 0;
+    let currentFrame = 0;
+    let displayedFrame = 0;
+    let rafId: number;
+
+    const unsubscribe = smoothProgress.on("change", (latest) => {
+      targetFrame = latest * (FRAME_COUNT - 1);
+    });
+
+    const tick = () => {
+      currentFrame += (targetFrame - currentFrame) * 0.1;
+      const rounded = Math.min(FRAME_COUNT - 1, Math.max(0, Math.round(currentFrame)));
+      if (rounded !== displayedFrame) {
+        displayedFrame = rounded;
+        setFrame(rounded + 1);
+      }
+      rafId = requestAnimationFrame(tick);
+    };
+
+    rafId = requestAnimationFrame(tick);
+    return () => {
+      unsubscribe();
+      cancelAnimationFrame(rafId);
+    };
+  }, [smoothProgress]);
+
   return (
     <section
       id="cinematic-interlude"
+      ref={sectionRef}
       className="py-24 md:py-32 bg-[#0D0D0C] text-[#FAF9F6] overflow-hidden relative"
     >
       <div className="absolute top-0 left-0 w-full h-[1px] bg-[#FAF9F6]/10" />
@@ -65,7 +120,7 @@ export default function CinematicVideo() {
             transition={{ duration: 0.6, delay: 0.25 }}
             className="text-xs sm:text-sm text-[#FAF9F6]/50 font-light leading-relaxed mt-4"
           >
-            Experience spatial warmth through a living gallery of hand-picked moments.
+            Experience spatial warmth through a living gallery that scrubs into focus as you scroll.
           </motion.p>
         </div>
 
@@ -90,6 +145,7 @@ export default function CinematicVideo() {
               className="w-full h-full object-cover brightness-[0.35] contrast-[1.05] scale-110"
             />
             <div className="absolute inset-0 bg-[#0D0D0C]/35" />
+            <WatermarkGuard />
           </motion.div>
 
           {/* Accent card — right, drifting behind the primary card */}
@@ -108,9 +164,10 @@ export default function CinematicVideo() {
               className="w-full h-full object-cover brightness-[0.35] contrast-[1.05] scale-110"
             />
             <div className="absolute inset-0 bg-[#0D0D0C]/35" />
+            <WatermarkGuard />
           </motion.div>
 
-          {/* Primary interactive motion card — tilts toward the cursor */}
+          {/* Primary interactive motion card — tilts toward the cursor and scrubs with scroll */}
           <motion.div
             ref={cardRef}
             onMouseMove={handlePointerMove}
@@ -129,7 +186,7 @@ export default function CinematicVideo() {
               className="absolute inset-0"
             >
               <img
-                src={framePath(12)}
+                src={framePaths[frame - 1]}
                 alt="Cinematic interior walkthrough"
                 className="w-full h-full object-cover brightness-[0.65] contrast-[1.08] scale-105"
               />
@@ -144,6 +201,7 @@ export default function CinematicVideo() {
 
             {/* Cinematic vignette */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#0D0D0C]/75 via-transparent to-[#0D0D0C]/20 pointer-events-none" />
+            <WatermarkGuard />
 
             {/* Golden corner brackets */}
             <div className="absolute top-5 left-5 w-10 h-10 border-t-2 border-l-2 border-[#C5A059]/60 pointer-events-none" />
@@ -151,7 +209,7 @@ export default function CinematicVideo() {
             <div className="absolute bottom-5 left-5 w-10 h-10 border-b-2 border-l-2 border-[#C5A059]/60 pointer-events-none" />
             <div className="absolute bottom-5 right-5 w-10 h-10 border-b-2 border-r-2 border-[#C5A059]/60 pointer-events-none" />
 
-            <div className="absolute bottom-6 left-0 w-full text-center px-4 pointer-events-none">
+            <div className="absolute bottom-6 left-0 w-full text-center px-4 pointer-events-none z-[2]">
               <p className="text-[9px] font-mono tracking-[0.25em] uppercase text-[#FAF9F6]/70">
                 Move to explore
               </p>

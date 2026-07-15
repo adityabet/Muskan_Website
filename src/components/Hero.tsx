@@ -287,23 +287,23 @@ export default function Hero() {
               </p>
             </motion.div>
 
-            <motion.div style={{ opacity: chapter1Opacity, y: chapter1Y, scale: chapter1Scale }} className="absolute bottom-[16%] left-0 max-w-md rounded-[1.75rem] border border-white/10 bg-black/15 p-5 backdrop-blur-xl">
-              <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.36em] text-[#C5A059]">Chapter I / Spatial Silence</p>
-              <p className="font-serif text-xl text-[#FAF9F6] sm:text-2xl">
+            <motion.div style={{ opacity: chapter1Opacity, y: chapter1Y, scale: chapter1Scale }} className="absolute bottom-[16%] left-0 max-w-md pl-5 border-l-2 border-[#C5A059]/70">
+              <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.36em] text-[#C5A059] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">Chapter I / Spatial Silence</p>
+              <p className="font-serif text-xl text-[#FAF9F6] sm:text-2xl drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]">
                 Quiet luxury expressed through proportion, light, and stillness.
               </p>
             </motion.div>
 
-            <motion.div style={{ opacity: chapter2Opacity, y: chapter2Y, scale: chapter2Scale }} className="absolute right-0 top-[24%] max-w-md rounded-[1.75rem] border border-white/10 bg-black/15 p-5 backdrop-blur-xl">
-              <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.36em] text-[#C5A059]">Chapter II / Materiality</p>
-              <p className="font-serif text-xl text-[#FAF9F6] sm:text-2xl">
+            <motion.div style={{ opacity: chapter2Opacity, y: chapter2Y, scale: chapter2Scale }} className="absolute right-0 top-[24%] max-w-md pr-5 border-r-2 border-[#C5A059]/70 text-right">
+              <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.36em] text-[#C5A059] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">Chapter II / Materiality</p>
+              <p className="font-serif text-xl text-[#FAF9F6] sm:text-2xl drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]">
                 Stone, oak, and brushed metal shaped into a softer architectural rhythm.
               </p>
             </motion.div>
 
-            <motion.div style={{ opacity: chapter3Opacity, y: chapter3Y, scale: chapter3Scale }} className="absolute bottom-[6%] right-[5%] max-w-sm rounded-[1.75rem] border border-white/10 bg-black/15 p-5 backdrop-blur-xl">
-              <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.36em] text-[#C5A059]">Chapter III / Atmosphere</p>
-              <p className="font-serif text-xl text-[#FAF9F6] sm:text-2xl">
+            <motion.div style={{ opacity: chapter3Opacity, y: chapter3Y, scale: chapter3Scale }} className="absolute bottom-[6%] right-[5%] max-w-sm pr-5 border-r-2 border-[#C5A059]/70 text-right">
+              <p className="mb-2 text-[10px] font-mono uppercase tracking-[0.36em] text-[#C5A059] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">Chapter III / Atmosphere</p>
+              <p className="font-serif text-xl text-[#FAF9F6] sm:text-2xl drop-shadow-[0_2px_14px_rgba(0,0,0,0.9)]">
                 A living narrative carried by light, shadow, and sculptural calm.
               </p>
             </motion.div>
